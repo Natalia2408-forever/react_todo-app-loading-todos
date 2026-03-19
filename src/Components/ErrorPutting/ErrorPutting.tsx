@@ -1,0 +1,33 @@
+import React from 'react';
+import classNames from 'classnames';
+
+type Props = {
+  errorMessage: string;
+  setErrorMessage: (errorMessage: string) => void;
+};
+
+export const ErrorPutting: React.FC<Props> = ({
+  errorMessage,
+  setErrorMessage,
+}) => {
+  return (
+    // DON'T use conditional rendering to hide the notification
+    // Add the 'hidden' class to hide the message smoothly
+    <div
+      data-cy="ErrorNotification"
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !errorMessage },
+      )}
+    >
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={() => setErrorMessage('')}
+      />
+      {/* show only one message at a time */}
+      {errorMessage}
+    </div>
+  );
+};

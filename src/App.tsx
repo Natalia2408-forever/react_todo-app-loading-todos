@@ -1,77 +1,69 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import { Header } from './Header';
-import { TodoList } from './TodoList';
-import { Footer } from './Footer';
-import { ErrorPutting } from './ErrorPutting';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
+import { Footer } from './components/Footer/Footer';
+import { ErrorPutting } from './components/ErrorPutting/ErrorPutting';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
-  const [selected, setSelected] = useState('All');
+  const [title, setTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [selected, setSelected] = useState('all');
 
   useEffect(() => {
-    const fetchingTodos = async () => {
-      try {
-        const todo = await getTodos();
-        setTodos(todo);
-      } catch {
-        setError('Unable to load todos');
-      }
-    };
-
-    fetchingTodos();
+    setErrorMessage('');
+    getTodos()
+      .then(setTodos)
+      .catch(error => {
+        setErrorMessage('Unable to load todos');
+        throw error;
+      });
   }, []);
 
   useEffect(() => {
-    if (error) {
-      const timingForError = setTimeout(() => setError(''), 3000);
+    if (errorMessage) {
+      const timingForError = setTimeout(() => setErrorMessage(''), 3000);
 
       return () => clearTimeout(timingForError);
     }
-  }, [error]);
+
+    return;
+  }, [errorMessage]);
+
+  const filteredTodos = todos.filter(todo => {
+    if (selected === 'active') {
+      return !todo.completed;
+    }
+
+    if (selected === 'completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const filteredTodos = useMemo(() => {
-    let filtered = [...todos];
-    switch (selected) {
-      case 'All':
-        return filtered;
-
-      case 'Active':
-        return (filtered = filtered.filter(todo => !todo.completed));
-
-      case 'Completed':
-        return (filtered = filtered.filter(todo => todo.completed));
-
-      default:
-        return filtered;
-    }
-  }, [selected, todos]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} />
-        <TodoList filteredTodos={filteredTodos} />
+        <Header todos={todos} title={title} setTitle={setTitle} />
+        {todos.length > 0 && <TodoList filteredTodos={filteredTodos} />}
         {todos.length !== 0 && (
-          <Footer
-            todos={todos}
-            selectedTodo={selected}
-            forSaveSelectedTodo={setSelected}
-          />
+          <Footer todos={todos} selected={selected} setSelected={setSelected} />
         )}
       </div>
-      <ErrorPutting errormessage={error} onClose={() => setError('')} />
+      <ErrorPutting
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
