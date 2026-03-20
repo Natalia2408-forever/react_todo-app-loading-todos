@@ -18,16 +18,16 @@ export const Footer: React.FC<Props> = ({ todos, selected, setSelected }) => {
     href: string;
     dataCy: string;
   }[] = [
-    { label: 'All', value: 'all', href: '#/', dataCy: 'FilterLinkAll' },
+    { label: 'All', value: Filter.All, href: '#/', dataCy: 'FilterLinkAll' },
     {
       label: 'Active',
-      value: 'active',
+      value: Filter.Active,
       href: '#/active',
       dataCy: 'FilterLinkActive',
     },
     {
       label: 'Completed',
-      value: 'completed',
+      value: Filter.Completed,
       href: '#/completed',
       dataCy: 'FilterLinkCompleted',
     },

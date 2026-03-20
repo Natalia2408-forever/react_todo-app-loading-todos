@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList/TodoList';
-import { Footer } from './components/Footer/Footer';
-import { ErrorPutting } from './components/ErrorPutting/ErrorPutting';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
+import { ErrorPutting } from './components/ErrorPutting';
 import { Filter } from './types/Filter';
 import { ErrorMessage } from './types/Errors';
 
@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | ''>('');
-  const [selected, setSelected] = useState<Filter>('all');
+  const [selected, setSelected] = useState<Filter>(Filter.All);
 
   useEffect(() => {
     setErrorMessage('');
@@ -36,11 +36,11 @@ export const App: React.FC = () => {
   }, [errorMessage]);
 
   const filteredTodos = todos.filter(todo => {
-    if (selected === 'active') {
+    if (selected === Filter.Active) {
       return !todo.completed;
     }
 
-    if (selected === 'completed') {
+    if (selected === Filter.Completed) {
       return todo.completed;
     }
 
