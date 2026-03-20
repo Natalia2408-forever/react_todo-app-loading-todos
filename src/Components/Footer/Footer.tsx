@@ -1,15 +1,37 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   todos: Todo[];
-  selected: string;
-  setSelected: (value: string) => void;
+  selected: Filter;
+  setSelected: React.Dispatch<React.SetStateAction<Filter>>;
 };
 
 export const Footer: React.FC<Props> = ({ todos, selected, setSelected }) => {
   const count = todos.filter(todo => !todo.completed).length;
+
+  const filters: {
+    label: string;
+    value: Filter;
+    href: string;
+    dataCy: string;
+  }[] = [
+    { label: 'All', value: 'all', href: '#/', dataCy: 'FilterLinkAll' },
+    {
+      label: 'Active',
+      value: 'active',
+      href: '#/active',
+      dataCy: 'FilterLinkActive',
+    },
+    {
+      label: 'Completed',
+      value: 'completed',
+      href: '#/completed',
+      dataCy: 'FilterLinkCompleted',
+    },
+  ];
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -19,38 +41,19 @@ export const Footer: React.FC<Props> = ({ todos, selected, setSelected }) => {
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: selected === 'all',
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setSelected('all')}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: selected === 'active',
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setSelected('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: selected === 'completed',
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setSelected('completed')}
-        >
-          Completed
-        </a>
+        {filters.map(f => (
+          <a
+            key={f.value}
+            href={f.href}
+            data-cy={f.dataCy}
+            className={classNames('filter-link', {
+              selected: selected === f.value,
+            })}
+            onClick={() => setSelected(f.value)}
+          >
+            {f.label}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}

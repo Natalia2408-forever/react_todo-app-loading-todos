@@ -6,19 +6,21 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { ErrorPutting } from './components/ErrorPutting/ErrorPutting';
+import { Filter } from './types/Filter';
+import { ErrorMessage } from './types/Errors';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [selected, setSelected] = useState('all');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | ''>('');
+  const [selected, setSelected] = useState<Filter>('all');
 
   useEffect(() => {
     setErrorMessage('');
     getTodos()
       .then(setTodos)
       .catch(error => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.LoadTodos);
         throw error;
       });
   }, []);

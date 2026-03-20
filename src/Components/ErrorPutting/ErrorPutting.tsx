@@ -1,9 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
+import { ErrorMessage } from '../../types/Errors';
 
 type Props = {
-  errorMessage: string;
-  setErrorMessage: (errorMessage: string) => void;
+  errorMessage: ErrorMessage | '';
+  setErrorMessage: React.Dispatch<React.SetStateAction<ErrorMessage | ''>>;
 };
 
 export const ErrorPutting: React.FC<Props> = ({
@@ -17,7 +18,7 @@ export const ErrorPutting: React.FC<Props> = ({
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !errorMessage },
+        { hidden: errorMessage === '' },
       )}
     >
       <button
