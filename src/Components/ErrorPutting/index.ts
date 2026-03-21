@@ -1,2 +1,1 @@
-import { ErrorPutting } from './ErrorPutting';
-export default ErrorPutting;
+export * from './ErrorPutting';

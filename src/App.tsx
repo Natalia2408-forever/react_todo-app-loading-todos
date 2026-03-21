@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import Header from './components/Header';
-import TodoList from './components/TodoList';
-import Footer from './components/Footer';
-import ErrorPutting from './components/ErrorPutting';
+import { Header } from './Components/Header';
+import { TodoList } from './Components/TodoList';
+import { Footer } from './Components/Footer';
+import { ErrorPutting } from './Components/ErrorPutting';
 import { Filter } from './types/Filter';
 import { ErrorMessage } from './types/Errors';
 
