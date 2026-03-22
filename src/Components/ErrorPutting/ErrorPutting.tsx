@@ -12,7 +12,6 @@ export const ErrorPutting: React.FC<Props> = ({
   setErrorMessage,
 }) => {
   return (
-    // DON'T use conditional rendering to hide the notification
     // Add the 'hidden' class to hide the message smoothly
     <div
       data-cy="ErrorNotification"
